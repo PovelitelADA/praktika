@@ -1,0 +1,38 @@
+testText =['Given a text file of many lines',
+  'where fields within a line ',
+  'are delineated by a single "dollar" character',
+  'write a program',
+  'that aligns each column of fields',
+  'by ensuring that words in each ',
+  'column are separated by at least one space.',
+  'Further, allow for each word in a column to be either left ',
+  'justified, right justified',
+  'or center justified within its column.']
+
+
+
+# Разбиваем каждую строку на поля
+fields = [line.split('$') for line in testText]
+
+# Находим максимальную длину поля в каждом столбце
+max_lengths = [max(len(field) for field in column) for column in zip(*fields)]
+
+# Проверяем, что количество полей в строках совпадает с длиной списка max_lengths
+if len(max_lengths) != len(fields[0]):
+    raise ValueError("Количество полей в строках не совпадает с длиной списка max_lengths")
+
+# Выравниваем каждый столбец
+aligned_fields = []
+for line in fields:
+    aligned_line = []
+    for i, field in enumerate(line):
+        aligned_field = field.ljust(max_lengths[i])
+        aligned_line.append(aligned_field)
+    aligned_fields.append(aligned_line)
+
+# Объединяем выровненные поля обратно в строки
+aligned_text = [' '.join(line) for line in zip(*aligned_fields)]
+
+# Выводим результат
+for line in aligned_text:
+    print(line)
