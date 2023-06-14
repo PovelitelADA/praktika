@@ -1,0 +1,41 @@
+def can_make_word(blocks, word):
+   # Создамка словарь, который сопоставляет каждую букву с блоками, которые ее содержат
+    blocks_dict = {}
+    for block in blocks:
+        for letter in block:
+            if letter not in blocks_dict:
+                blocks_dict[letter] = []
+            blocks_dict[letter].append(block)
+
+   # может ли слово быть составлено из блоков
+    def dfs(word):
+        # Если слово пустое, создаем его из блоков
+        if len(word) == 0:
+            return True
+
+        # Найдемка первую букву слова и проверим, есть ли она в каком-либо из блоков
+        first_letter = word[0].lower()
+        if first_letter not in blocks_dict:
+            return False
+
+        # Попробуем каждый блок, содержащий первую букву слова
+        for block in blocks_dict[first_letter]:
+           # Удалим блок из словаря, зачем нам это
+            blocks_dict[first_letter].remove(block)
+
+           # Рекурсивно проверяем, можем ли мы составить остальную часть слова из оставшихся блоков
+            if dfs(word[1:]):
+                return True
+
+            # Вернем блок обратно в словарь, чтобы позже мы могли попробовать его с другой буквой.
+            blocks_dict[first_letter].append(block)
+
+        # Если ни один из блоков не работает, ниче не получится
+        return False
+
+   # Если ни один из блоков не работает, ниче не составим
+    return dfs(word.lower())
+#Вызывает функцию dfs с аргументом word.lower(), который приводит все буквы слова к нижнему регистру
+blocks = input("Enter blocks separated by space: ").split()
+word = input("Enter a word: ")
+print(can_make_word(blocks, word))
